@@ -125,7 +125,7 @@ public class VivemonkecraftServerMod implements ModInitializer {
                     MonkeModelS2CPayload sync = new MonkeModelS2CPayload(
                             context.player().getUUID(), payload.enabled());
                     for (var p : net.fabricmc.fabric.api.networking.v1.PlayerLookup.all(
-                            context.player().getServer())) {
+                            context.player().level().getServer())) {
                         ServerPlayNetworking.send(p, sync);
                     }
                 }
