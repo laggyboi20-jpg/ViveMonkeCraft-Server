@@ -154,7 +154,7 @@ public class VivemonkecraftServerMod implements ModInitializer {
             // regardless of what the config says. (Ops also bypass the client-side
             // setting caps via their permission level, so allowances don't matter
             // for them — they're sent the same allowances as everyone anyway.)
-            boolean isOp = handler.player.hasPermissions(ServerModConfig.opBypassLevel);
+            boolean isOp = hasOpLevel(handler.player, ServerModConfig.opBypassLevel);
 
             ServerPlayNetworking.send(
                     handler.player,
@@ -175,5 +175,20 @@ public class VivemonkecraftServerMod implements ModInitializer {
         });
 
         LOGGER.info("ViveMonke(Quest)Craft Server Config — ready.");
+    }
+
+    // 1.21.11 replaced ServerPlayer.hasPermissions(int) with a PermissionSet.
+    // Map the configurable op-bypass level (0-4) to the matching command permission.
+    // The level-based permission set is hierarchical (a higher-level op also holds the
+    // lower permissions), so this preserves the old hasPermissions(level) "at least" check.
+    public static boolean hasOpLevel(net.minecraft.server.level.ServerPlayer player, int level) {
+        var perms = player.permissions();
+        return switch (level) {
+            case 0  -> true;
+            case 1  -> perms.hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_MODERATOR);
+            case 2  -> perms.hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
+            case 3  -> perms.hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_ADMIN);
+            default -> perms.hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_OWNER);
+        };
     }
 }

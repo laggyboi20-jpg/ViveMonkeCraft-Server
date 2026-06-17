@@ -121,7 +121,7 @@ public final class MovementEnforcer {
             // These bypass all checks so legitimate fast/airborne states aren't
             // incorrectly flagged.  Operators (level 2+) are also exempt so admins
             // can always use the mod on their own server.
-            if (player.hasPermissions(ServerModConfig.opBypassLevel) // op bypass
+            if (VivemonkecraftServerMod.hasOpLevel(player, ServerModConfig.opBypassLevel) // op bypass
                     || ServerModConfig.opBypassLevel == 0           // 0 = everyone exempt
                     || player.isCreative()
                     || player.isSpectator()
