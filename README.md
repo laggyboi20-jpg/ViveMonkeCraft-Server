@@ -15,7 +15,7 @@ Designed for VR and movement based gameplay, the mod helps keep player abilities
 
 ## Compatibility
 
-Minecraft: 1.21.6  
+Minecraft: 1.21.7  
 Loader: Fabric  
 Works with ViveMonkeCraft setups using compatible VR environments.
 
