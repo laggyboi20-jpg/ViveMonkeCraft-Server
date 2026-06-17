@@ -34,7 +34,7 @@ public class VivemonkecraftServerMod implements ModInitializer {
 
         // 2. Register the S2C payload type.
         //    Must be done once during init so Fabric knows how to encode it.
-        PayloadTypeRegistry.playS2C().register(
+        PayloadTypeRegistry.clientboundPlay().register(
                 ServerConfigPayload.ID,
                 ServerConfigPayload.STREAM_CODEC
         );
@@ -47,7 +47,7 @@ public class VivemonkecraftServerMod implements ModInitializer {
         //     sends a keepalive every tick it's gripping (climbing/sliding); we zero
         //     that player's fallDistance while the keepalives arrive — slide all the
         //     way = no damage, let go partway = damage only from the release point.
-        PayloadTypeRegistry.playC2S().register(
+        PayloadTypeRegistry.serverboundPlay().register(
                 WallSlideC2SPayload.ID,
                 WallSlideC2SPayload.STREAM_CODEC
         );
@@ -63,7 +63,7 @@ public class VivemonkecraftServerMod implements ModInitializer {
         // 3a-2. Magma touch: client tells us a hand is gripping a magma block; apply
         //       hot-floor damage to the sender (server-authoritative, like fall damage).
         //       Invulnerability frames throttle the cadence; fire resistance negates it.
-        PayloadTypeRegistry.playC2S().register(
+        PayloadTypeRegistry.serverboundPlay().register(
                 MagmaTouchC2SPayload.ID,
                 MagmaTouchC2SPayload.STREAM_CODEC
         );
@@ -82,7 +82,7 @@ public class VivemonkecraftServerMod implements ModInitializer {
         //     box, so movement validation agrees with the client's shrunk box
         //     and 1-block tunnels work. Fabric runs this handler on the server
         //     thread, so touching the player here is safe.
-        PayloadTypeRegistry.playC2S().register(
+        PayloadTypeRegistry.serverboundPlay().register(
                 RealMonkeC2SPayload.ID,
                 RealMonkeC2SPayload.STREAM_CODEC
         );
@@ -110,11 +110,11 @@ public class VivemonkecraftServerMod implements ModInitializer {
         // 3c. Monke model (legless look) sync: a client announces its toggle and
         //     we broadcast it to every player, so all mod users see each other
         //     without legs. Joiners get the full current set replayed (below).
-        PayloadTypeRegistry.playC2S().register(
+        PayloadTypeRegistry.serverboundPlay().register(
                 MonkeModelC2SPayload.ID,
                 MonkeModelC2SPayload.STREAM_CODEC
         );
-        PayloadTypeRegistry.playS2C().register(
+        PayloadTypeRegistry.clientboundPlay().register(
                 MonkeModelS2CPayload.ID,
                 MonkeModelS2CPayload.STREAM_CODEC
         );

@@ -1,6 +1,7 @@
 plugins {
-    // -remap variant: 1.21.4 is still obfuscated, so Loom remaps Minecraft (unlike 26.1+).
-    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+    // 26.1+ ships a DEOBFUSCATED Minecraft, so we use the plain (non-remap) Loom plugin
+    // and NO mappings block. (Pre-26.1 obfuscated MC used fabric-loom-remap + mappings.)
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id 'maven-publish'
 }
 
@@ -20,10 +21,9 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    // Official Mojang mappings (same names the source was written against).
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // No mappings block: 26.1+ Minecraft is already deobfuscated (Mojang names).
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 processResources {
@@ -41,12 +41,12 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
-    it.options.release.set(21)
+    it.options.release.set(25)
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
     withSourcesJar()
 }
 
